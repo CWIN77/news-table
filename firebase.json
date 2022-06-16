@@ -2,5 +2,16 @@
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
+<<<<<<< HEAD
+=======
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+>>>>>>> 7c484a9e0fb77d3877924e0db21942c135d67ff8
   }
 }

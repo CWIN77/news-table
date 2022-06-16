@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 ### This code runs periodically every two hours to store news data!
 ### Hosting with heroku
+=======
+### This code runs periodically every two hours to store news data!
+>>>>>>> 7c484a9e0fb77d3877924e0db21942c135d67ff8
