@@ -28,12 +28,12 @@ const reqData = [
 ]
 
 app.listen(port, ()=>{
-  cron.schedule('* */2 * * *', async()=>{
+  cron.schedule('* * * * *', async()=>{
     reqData.forEach(async(data)=>{
       const res1 = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=30&playlistId=${data.id}&key=${data.key}`);
       const videoList = await res1.json();
       const timer1 = setInterval(async() => {
-        if(videoList.items !== undefined){
+        if(videoList.items){
           clearInterval(timer1)
           await videoList.items.forEach(async({snippet})=>{
             const img = snippet.thumbnails.high?.url;
@@ -44,22 +44,22 @@ app.listen(port, ()=>{
               const res2 = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${id}&key=${data.key}`);
               const videoData = await res2.json();
               const timer2 = setInterval(async() => {
-                if(videoData.items !== undefined){
+                if(videoData.items){
                   clearInterval(timer2)
                   const view = Number(videoData.items[0].statistics.viewCount);
                   await db.collection(data.name).doc(id).set({title,img,date,view})
                 }
-              }, 100);
+              }, 1000);
             }
           })
-          await db.collection(data.name).where("date","<",Number(moment().format('YYMMDDHHmm')) - 3000000).get().then((docs)=>{
+          await db.collection(data.name).where("date","<",Number(moment().format('YYMMDDHHmm')) - 30000).get().then((docs)=>{
             docs.forEach((doc)=>{
               db.collection(data.name).doc(doc.id).delete();
             })
           })
-          await db.collection(data.name).doc("lastUpdate").set({date:moment().format('YYMMDDHHmm')})
+          await db.collection(data.name).doc("lastUpdate").set({date:Number(moment().format('YYMMDDHHmm'))})
         }
-      }, 100);
+      }, 1000);
     })
   });
 })
